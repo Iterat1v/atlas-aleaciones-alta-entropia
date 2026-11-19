@@ -140,6 +140,95 @@ footer{margin-top:40px;padding:22px 26px;color:var(--mute);font-size:13px}
 footer b{color:var(--fg)}
 footer ul{margin:8px 0 0;padding-left:18px}footer li{margin:3px 0}
 
+
+/* ===== recorrido de las etapas 1 y 2 ===== */
+.js .rv{opacity:0;transform:translateY(26px) scale(.985);filter:blur(10px);transition:opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),filter .9s ease var(--d,0s)}
+.js .rv.in{opacity:1;transform:none;filter:none}
+.orb{position:absolute;right:clamp(16px,5vw,70px);top:50%;width:clamp(150px,21vw,290px);aspect-ratio:1;translate:0 -50%;pointer-events:none}
+.orb i{position:absolute;inset:0;border-radius:42% 58% 60% 40%/48% 40% 60% 52%;animation:morph 11s ease-in-out infinite,float 7s ease-in-out infinite;
+  background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.85),rgba(255,255,255,.12) 22%,transparent 40%),radial-gradient(circle at 65% 70%,rgba(79,195,247,.55),transparent 55%),linear-gradient(145deg,rgba(255,107,26,.85),rgba(255,77,141,.7));
+  box-shadow:inset 0 0 40px rgba(255,255,255,.35),inset -14px -20px 40px rgba(0,0,0,.35),0 30px 70px -20px rgba(255,107,26,.6)}
+.orb i:nth-child(2){inset:62% 0 0 68%;animation-duration:9s,6s;animation-delay:-3s;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.8),transparent 38%),linear-gradient(145deg,rgba(79,195,247,.8),rgba(167,139,250,.6))}
+.orb i:nth-child(3){inset:-6% 62% 70% -6%;animation-duration:13s,8s;animation-delay:-5s;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.8),transparent 38%),linear-gradient(145deg,rgba(255,77,141,.85),rgba(255,162,58,.6))}
+@keyframes morph{0%,100%{border-radius:42% 58% 60% 40%/48% 40% 60% 52%}33%{border-radius:60% 40% 44% 56%/40% 58% 42% 60%}66%{border-radius:48% 52% 38% 62%/58% 44% 56% 42%}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(6deg)}}
+.hero .tag2{display:inline-flex;gap:8px;align-items:center;font:600 12px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--fire2);margin-bottom:14px;position:relative;z-index:1}
+.hero .tag2::before{content:"";width:28px;height:2px;background:linear-gradient(90deg,var(--fire),var(--pink))}
+.hero p,.hero h1,.hero .kpis{position:relative;z-index:1}
+.big{font:700 clamp(30px,4vw,46px)/1 var(--disp);font-variant-numeric:tabular-nums}
+.lbl{color:var(--mute);font-size:13px}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.cols3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.cols3{grid-template-columns:1fr}}
+.mini-card{padding:16px 18px;border-radius:20px;min-width:0}
+.mini-card .arrow{color:var(--fire2);font-weight:600}
+.mini-card p{color:var(--mute);font-size:13.5px;margin-top:6px}
+.glass.mini-card{border-radius:22px}
+.cols3>.mini-card:not(.glass),.out div,.cols3 .mini-card.plain{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.funnel{display:grid;gap:10px;margin-top:6px}
+.fn{display:grid;grid-template-columns:minmax(150px,230px) 1fr;gap:14px;align-items:center}
+.fn .tr{height:38px;border-radius:12px;background:rgba(255,255,255,.05);overflow:hidden;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.fn .fill{height:100%;width:0;border-radius:12px;background:linear-gradient(90deg,var(--fire),var(--fire2));display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font:700 14px var(--disp);color:#1b0b00;transition:width 1.4s cubic-bezier(.2,.8,.2,1) var(--d,0s);white-space:nowrap}
+.in .fn .fill{width:var(--w)}
+.fn small{color:var(--dim);font-size:12.5px;display:block}
+.fn b{font-weight:600;font-size:14px}
+@media (max-width:640px){.fn{grid-template-columns:1fr}}
+.hyp{padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.hyp .n{font:700 13px var(--mono);color:var(--dim)}
+.hyp p{color:var(--fg);font-size:14.5px}
+.verdict{margin-top:auto;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:6px 14px;border-radius:999px;font:600 13px var(--body);color:#06210f;background:linear-gradient(90deg,#5eead4,#7ee787);box-shadow:0 8px 24px -10px #5eead4;transform:scale(.6);opacity:0;transition:.7s cubic-bezier(.3,1.6,.4,1) .8s}
+.in .verdict{transform:none;opacity:1}
+.bsvg{width:100%;height:auto;display:block;overflow:visible}
+.bsvg text{fill:#b4b4c2;font:12px Inter,sans-serif}
+.bsvg .lab{fill:#ececf1;font-weight:600;font-size:13px}
+.bsvg .gl{stroke:rgba(255,255,255,.08)}
+.bsvg .bx{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);transition:transform 1.1s cubic-bezier(.2,.8,.2,1) var(--d,0s)}
+.bsvg.go .bx{transform:scaleX(1)}
+.bsvg .od{opacity:0;transition:opacity .6s ease 1.1s}.bsvg.go .od{opacity:.85}
+.seg{display:inline-flex;gap:6px;flex-wrap:wrap}
+.pcell{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;min-width:70px}
+.pcell i{display:block;height:100%;width:0;border-radius:99px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.in .pcell i{width:var(--w)}
+.mrow{display:grid;grid-template-columns:150px 1fr 52px;gap:12px;align-items:center;margin:9px 0;font-size:13.5px}
+.mrow b{text-align:right;font-variant-numeric:tabular-nums}
+.ratio{display:grid;grid-template-columns:90px 1fr 54px;gap:10px;align-items:center;margin:10px 0;font-size:13px}
+.ratio .tr{height:16px;border-radius:99px;background:rgba(255,255,255,.06);position:relative}
+.ratio .iq{position:absolute;top:3px;bottom:3px;border-radius:99px;opacity:.55;background:#fff}
+.ratio .f{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:99px;transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.ratio .one{position:absolute;top:-4px;bottom:-4px;width:2px;background:#fff;opacity:.8}
+.in .ratio .f{width:var(--w)}
+.dvb{position:absolute;top:2px;bottom:2px;width:0;border-radius:99px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.in .dvb{width:var(--w)}
+.ratio b{font-variant-numeric:tabular-nums;text-align:right}
+.calc{display:grid;gap:14px}
+.calc label{font:600 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:6px}
+.calc input[type=range]{width:100%}
+.out{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.out div{padding:14px;border-radius:16px}
+.out b{display:block;font:700 28px var(--disp);font-variant-numeric:tabular-nums}
+.out span{font-size:12.5px;color:var(--mute)}
+.out .hi b{background:linear-gradient(90deg,var(--fire),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tbl{width:100%;font-size:13.5px}
+.tbl td,.tbl th{padding:8px 10px}
+.pbar{display:inline-block;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--sky),var(--pink));vertical-align:middle;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.in .pbar{width:var(--w)}
+.chk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.chk{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.chk{grid-template-columns:1fr}}
+.chk .mini-card b.v{display:block;font:700 28px var(--disp);font-variant-numeric:tabular-nums;margin-bottom:2px}
+.rev{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.rev span{font:500 12px var(--mono);padding:4px 10px;border-radius:99px;border:1px solid rgba(255,162,58,.5);color:var(--fire2)}
+.concl{display:grid;gap:12px;align-content:start}
+.concl .mini-card{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+.concl .no{font:700 26px var(--disp);color:var(--fire2)}
+.refs{font-size:12.5px;color:var(--mute);columns:2 380px;column-gap:28px}
+.refs p{break-inside:avoid;margin:0 0 9px;color:var(--mute)}
+.refs a{color:var(--sky);word-break:break-all}
+.card,.mini-card,.hyp{transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .9s cubic-bezier(.2,.8,.2,1) var(--d,0s),filter .9s ease var(--d,0s)}
+.js .rv.in.mini-card:hover,.js .rv.in.hyp:hover{transform:translateY(-4px)}
+.exh{margin:44px 6px 14px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+.exh h2{font-size:clamp(24px,3vw,32px)}
+@media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;filter:none}.orb i{animation:none}.fn .fill,.pcell i,.pbar,.ratio .f,.bsvg .bx{transition:none}}
 @media (max-width:1000px){.c8,.c7,.c6,.c5,.c4{grid-column:span 12}.plot,.plot.tall{height:300px}}
 @media (max-width:640px){.hero{padding:24px 20px}.nav{border-radius:24px}.frow>label{min-width:100%}.reset{margin-left:0}}
 @media (prefers-reduced-motion:reduce){.bg i{animation:none}*{transition:none!important;scroll-behavior:auto}}
@@ -147,20 +236,91 @@ footer ul{margin:8px 0 0;padding-left:18px}footer li{margin:3px 0}
 </style>
 </head>
 <body>
+<script>document.documentElement.classList.add("js")</script>
 <div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 
 <div class="wrap">
  <nav class="nav glass" aria-label="Secciones">
   <div class="brand"><span class="dot"></span>Atlas HEA</div>
-  <a href="#resumen" class="on">Resumen</a><a href="#propiedades">Propiedades</a><a href="#estructura">Estructura</a><a href="#proceso">Proceso y temperatura</a><a href="#tabla">Registros</a>
+  <a href="#resumen" class="on">Resumen</a><a href="#limpieza">Etapa 1</a><a href="#hipotesis">Etapa 2</a><a href="#familias">Fases y YS</a><a href="#tabor">Dureza</a><a href="#explorador">Explorador</a><a href="#consistencia">Consistencia</a><a href="#conclusiones">Conclusiones</a>
  </nav>
 
  <header class="hero glass" id="resumen">
+  <div class="orb" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="tag2">Ingeniería de Materiales · Dataset 3</div>
   <h1>Aleaciones de <em>alta entropía</em>, en datos</h1>
-  <p>Explora 1,527 registros del Dataset 3: cuánta resistencia y ductilidad logran, qué estructura cristalina las sostiene y cómo cambian con el procesamiento y la temperatura. Filtra arriba y todo se recalcula.</p>
-  <div class="kpis" id="kpis"></div>
+  <p>La estructura cristalina separa la resistencia de estas aleaciones tres veces, y la regla de la dureza solo acierta en una de sus familias. Este es el recorrido completo, desde el dato sucio hasta la conclusión, con el análisis de las etapas 1 y 2.</p>
+  <div class="kpis" id="hkpis">
+   <div class="kpi"><b data-count="1527">0</b><span>registros limpios</span><small>de 1,545 originales</small></div>
+   <div class="kpi"><b data-count="265">0</b><span>artículos de origen</span><small>cada uno con DOI</small></div>
+   <div class="kpi"><b data-count="629">0</b><span>aleaciones distintas</span><small>672 fórmulas escritas</small></div>
+   <div class="kpi"><b data-count="3.27" data-dec="2" data-suf="×">0</b><span>BCC/B2 frente a FCC</span><small>cociente de YS medianos</small></div>
+   <div class="kpi"><b data-count="0.91" data-dec="2">0</b><span>acierto de Tabor en BCC/B2</span><small>0.52 en las FCC</small></div>
+  </div>
  </header>
+
+ <section class="sec" id="limpieza">
+  <header class="rv"><h2>Etapa 1 · De un archivo sucio a un dataset confiable</h2><p>Pandas decía «0 duplicados» y «672 aleaciones». Revisando a mano, la realidad era otra.</p></header>
+  <div class="cols3">
+   <div class="mini-card glass rv" style="--d:.05s"><span class="lbl">Filas</span><div class="big"><span data-count="1545">0</span> <span class="arrow">→</span> <span data-count="1527">0</span></div><p>18 filas idénticas que el índice disfrazaba. No aportaban información y darían doble peso a esas aleaciones.</p></div>
+   <div class="mini-card glass rv" style="--d:.12s"><span class="lbl">Aleaciones</span><div class="big"><span data-count="672">0</span> <span class="arrow">→</span> <span data-count="629">0</span></div><p>CoCrFeMnNi estaba escrita de cinco formas. Leí cada fórmula a fracciones atómicas y armé una clave única.</p></div>
+   <div class="mini-card glass rv" style="--d:.19s"><span class="lbl">Etiquetas de fase</span><div class="big"><span data-count="118">0</span> <span class="arrow">→</span> <span data-count="85">0</span> <span class="arrow">→</span> <span data-count="6">0</span></div><p>Espacios, mayúsculas, «2FCC» y «BCC + ». Al final, seis familias para poder comparar.</p></div>
+   <div class="mini-card glass rv" style="--d:.26s"><span class="lbl">Números guardados como texto</span><div class="big"><span data-count="4">0</span> <span class="lbl">formatos</span></div><p>Valores con ±, rangos, «&gt;50» y «&lt;160». Un «&gt;50» de elongación significa que la probeta no se rompió, no que valga 50. Guardé aparte el tipo de dato.</p></div>
+   <div class="mini-card glass rv" style="--d:.33s"><span class="lbl">Filas sin fase reportada</span><div class="big"><span data-count="141">0</span></div><p>No las rellené. Inventar la fase de una aleación sería peor que perder esos datos.</p></div>
+   <div class="mini-card glass rv" style="--d:.4s"><span class="lbl">Temperatura de ensayo</span><div class="big">−269 <span class="arrow">a</span> 1,600 °C</div><p>Parece un error y no lo es: helio líquido en un extremo y refractarias MoNbTaW en el otro.</p></div>
+  </div>
+  <div class="glass card rv" style="margin-top:16px"><h3>Datos faltantes por variable</h3><p class="sub">Porcentaje de los 1,527 registros sin el dato. En rojo, más de 80 %.</p><div id="miss"></div>
+   <p class="note">Que falte la UTS en 65 % no significa que nadie la midió: en compresión casi no se reporta, y hay 395 filas que solo traen dureza. Que a esas filas les falte el tipo de ensayo tampoco es un error.</p></div>
+ </section>
+
+ <section class="sec" id="hipotesis">
+  <header class="rv"><h2>Etapa 2 · Pregunta e hipótesis</h2><p>¿Cuánto cambia el esfuerzo de cedencia (YS) según la estructura de fases, y por qué la regla de Tabor (YS ≈ HV·g/3) acierta en unas familias y falla en otras?</p></header>
+  <div class="cols3">
+   <div class="hyp glass rv" style="--d:.05s"><span class="n">HIPÓTESIS 1</span><p>Las BCC/B2 tendrán un YS mucho mayor que las FCC, porque sus dislocaciones de tornillo se mueven con más dificultad.</p><span class="verdict">✓ Se cumple · 3.3 veces</span></div>
+   <div class="hyp glass rv" style="--d:.15s"><span class="n">HIPÓTESIS 2</span><p>El VEC se relacionará con el YS sobre todo porque separa las fases. Dentro de una familia el efecto será débil.</p><span class="verdict">✓ Se cumple · −0.56 global, −0.19 en FCC</span></div>
+   <div class="hyp glass rv" style="--d:.25s"><span class="n">HIPÓTESIS 3</span><p>Tabor funcionará mejor en las BCC/B2, que se endurecen poco al deformarse, y sobreestimará el YS de las FCC.</p><span class="verdict">✓ Se cumple · 0.91 contra 0.52</span></div>
+  </div>
+  <div class="glass card rv" style="margin-top:16px"><h3>Selección de datos</h3><p class="sub">Solo temperatura ambiente, solo filas con YS y solo filas con familia de fases definida.</p>
+   <div class="funnel" id="funnel"></div>
+   <p class="note">No son 681 experimentos independientes: son <b>176 artículos</b> y varias filas salen del mismo equipo y del mismo método. Por eso la comprobación de confiabilidad remuestrea artículos completos.</p></div>
+ </section>
+
+ <section class="sec" id="familias">
+  <header class="rv"><h2>Análisis 1 · El YS según la estructura de fases</h2><p>Base de 681 mediciones a temperatura ambiente. Cambia el ensayo para comprobar que la diferencia no se debe a medir unas familias en tensión y otras en compresión.</p></header>
+  <div class="grid">
+   <article class="glass card c8 rv"><div class="frow" style="justify-content:space-between"><div><h3>Distribución del YS por familia</h3><p class="sub" style="margin:0">Caja: Q1 a Q3 · línea clara: mediana · puntos: valores atípicos</p></div><div class="seg" id="bx-seg"></div></div>
+    <div id="boxwrap" style="margin-top:12px"></div></article>
+   <article class="glass card c4 rv" style="--d:.1s"><h3>¿Es significativa la diferencia?</h3><p class="sub">Kruskal-Wallis, sin suponer normalidad.</p>
+    <div class="big" style="margin-top:6px">H = <span data-count="332.7" data-dec="1">0</span></div><p class="lbl">p ≈ 9×10⁻⁷⁰</p>
+    <div class="big" style="margin-top:14px">η² = <span data-count="0.49" data-dec="2">0</span></div><p class="lbl">La familia explica casi la mitad de la variación del YS. La otra mitad viene de la composición, el grano y el proceso.</p></article>
+   <article class="glass card c6 rv"><h3>Comparación por pares</h3><p class="sub">Probabilidad de que una aleación al azar de A sea más resistente que una de B.</p><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>A</th><th>B</th><th>P(A &gt; B)</th><th>p</th></tr></thead><tbody id="pairs"></tbody></table></div></article>
+   <article class="glass card c6 rv" style="--d:.1s"><h3>Comprobaciones de confiabilidad</h3><p class="sub">BCC/B2 frente a FCC en cada subconjunto.</p><div id="checks"></div>
+    <div class="cols3" style="margin-top:12px;grid-template-columns:1fr 1fr"><div class="mini-card"><span class="lbl">BCC/B2 ÷ FCC (medianas)</span><div class="big">3.27×</div><p>IC 95 % por artículo [2.54, 4.07]</p></div><div class="mini-card"><span class="lbl">FCC + BCC ÷ FCC</span><div class="big">2.55×</div><p>IC 95 % por artículo [1.61, 3.49]</p></div></div></article>
+   <article class="glass card c7 rv"><h3>El VEC separa fases, no mide resistencia</h3><p class="sub">VEC contra YS. Dos nubes: BCC arriba a la izquierda y FCC abajo a la derecha.</p>
+    <div class="legend" id="lg-vec"></div><div class="plot tall"><canvas id="ch-vecys"></canvas></div></article>
+   <article class="glass card c5 rv" style="--d:.1s"><h3>Correlación de Spearman VEC–YS</h3><p class="sub">Fuerte en global, débil dentro de cada familia.</p><div id="spear"></div>
+    <p class="note">La correlación global sale de la distancia entre las dos nubes, no de una tendencia dentro de cada una. En las BCC/B2 hasta cambia de signo.</p></article>
+  </div>
+ </section>
+
+ <section class="sec" id="tabor">
+  <header class="rv"><h2>Análisis 2 · ¿Sirve la dureza para estimar el YS?</h2><p>La regla de Tabor dice YS ≈ HV·9.807/3. La razón YS ÷ (HV·g/3) vale 1 si acierta y menos de 1 si sobreestima.</p></header>
+  <div class="grid">
+   <article class="glass card c7 rv"><h3>Dureza contra YS (224 aleaciones, 66 artículos)</h3><p class="sub">Línea blanca: Tabor. Línea rosa: ajuste de los datos.</p>
+    <div class="legend" id="lg-tab"></div><div class="plot tall"><canvas id="ch-tabor"></canvas></div><p class="note" id="n-tabor"></p></article>
+   <article class="glass card c5 rv" style="--d:.1s"><h3>Razón YS ÷ Tabor por familia</h3><p class="sub">Mediana y rango intercuartil. La marca blanca es 1: Tabor acierta.</p><div id="ratios"></div>
+    <p class="note">IC 95 % por artículo: FCC [0.41, 0.60] · BCC/B2 [0.84, 0.96] · FCC + BCC [0.64, 1.07]. No se traslapan.</p></article>
+   <article class="glass card c12 rv"><h3>Calculadora de diseño</h3><p class="sub">Estima el YS desde una dureza Vickers. En las FCC la dureza sobreestima casi al doble.</p>
+    <div class="calc"><div class="frow"><div style="flex:1;min-width:220px"><label for="hv-r">Dureza HV: <span id="hv-v" class="count"></span></label><input type="range" id="hv-r" min="100" max="900" step="5" value="400"></div>
+     <div><label for="hv-f">Familia</label><select id="hv-f"></select></div></div>
+     <div class="out"><div><b id="o-t">—</b><span>YS según Tabor (HV·g/3)</span></div><div class="hi"><b id="o-c">—</b><span id="o-cs">YS corregido con la razón mediana</span></div></div></div></article>
+  </div>
+ </section>
+
+ <div class="exh rv" id="explorador"><h2>Explorador interactivo</h2><p style="color:var(--mute);max-width:70ch;margin:0">Filtra todo el dataset y mira cómo cambian las gráficas. Los números de arriba son fijos; los de aquí se recalculan.</p></div>
+ <div class="kpis" id="kpis" style="margin-bottom:16px"></div>
+
 
  <section class="filters glass" aria-label="Filtros">
   <div class="frow"><label>Estructura</label><div class="frow" id="f-fam"></div></div>
@@ -194,7 +354,7 @@ footer ul{margin:8px 0 0;padding-left:18px}footer li{margin:3px 0}
   </div>
  </section>
 
- <section class="sec" id="estructura">
+ <section class="sec" id="fases">
   <header><h2>Estructura cristalina</h2><p>La concentración de electrones de valencia (VEC) ayuda a anticipar la fase: FCC a partir de 8 y BCC por debajo de 6.87.</p></header>
   <div class="grid">
    <article class="glass card c7"><h3>Fases según el VEC</h3><p class="sub">Registros por intervalo de VEC, coloreados por estructura.</p>
@@ -222,16 +382,62 @@ footer ul{margin:8px 0 0;padding-left:18px}footer li{margin:3px 0}
    <button class="more" id="more">Mostrar más</button></div>
  </section>
 
- <footer class="glass">
-  <b>Sobre los datos.</b> Fuente: Borg et al. (2020), <i>Scientific Data</i> 7, 430. Dataset 3 del curso de Ingeniería de Materiales, ya depurado: 1,527 registros de 672 fórmulas.
-  <ul>
-   <li>Una aleación puede tener varios registros: distinto proceso, temperatura o ensayo.</li>
-   <li>Muchos registros no tienen todos los datos: el YS existe en 70 %, la elongación en 41 % y el tamaño de grano en 16 %.</li>
-   <li>Los valores de «mayor que» y «menor que» se muestran como el número reportado.</li>
-   <li>La densidad es la calculada con la regla de mezclas, no la medida.</li>
-  </ul>
+ <section class="sec" id="consistencia">
+  <header class="rv"><h2>Consistencia de ingeniería</h2><p>Antes de confiar en el dataset, lo contrasté con lo que exige la física.</p></header>
+  <div class="chk">
+   <div class="mini-card glass rv"><b class="v" data-count="0.06" data-dec="2" data-suf=" %">0</b><span class="lbl">Diferencia mediana de densidad</span><p>Mi regla de mezclas coincide con la del dataset. 41 filas pasan de 3 %, con errores identificados.</p><div class="rev"><span>AlCoCrFeNi 5.7 vs 6.73</span><span>serie con carbono</span><span>HfNbSi0.5TiV</span></div></div>
+   <div class="mini-card glass rv" style="--d:.07s"><b class="v" data-count="0">0</b><span class="lbl">Filas con UTS menor que el YS</span><p>Imposible por definición y no hay ninguna. Ojo: la «UTS» de compresión es la resistencia máxima a compresión.</p></div>
+   <div class="mini-card glass rv" style="--d:.14s"><b class="v" data-count="77" data-suf=" %">0</b><span class="lbl">Acierto de la regla de VEC</span><p>FCC si VEC ≥ 8 y BCC si VEC &lt; 6.87 (Guo et al., 2011). Falla sobre todo en FCC con VEC bajo y en aleaciones base aluminio.</p></div>
+   <div class="mini-card glass rv" style="--d:.21s"><b class="v" data-count="107">0</b><span class="lbl">Series de temperatura revisadas</span><p>Misma aleación, artículo y proceso, con 3 o más temperaturas. En ninguna el YS sube más de 10 % al calentar.</p></div>
+   <div class="mini-card glass rv" style="--d:.28s"><b class="v" data-count="24">0</b><span class="lbl">Valores atípicos a temperatura ambiente</span><p>Los revisé todos y no quité ninguno: SPS de grano fino, laminadas en frío, deformación plástica severa.</p><div class="rev"><span>CoCrNiCuZn: porosidad</span><span>AlCoCrFeNiTi0.5: HV 178 con YS 2260</span></div></div>
+   <div class="mini-card glass rv" style="--d:.35s"><b class="v" data-count="35" data-suf=" %">0</b><span class="lbl">Menos densidad real que la teórica</span><p>CoCrNiCuZn y AgAlNbTiZn tienen mucha porosidad, y eso explica por qué la resistencia de CoCrNiCuZn salió tan rara.</p></div>
+  </div>
+  <div class="grid" style="margin-top:16px">
+   <article class="glass card c7 rv"><h3>Hall–Petch en la aleación de Cantor</h3><p class="sub">CoCrFeMnNi en tensión a temperatura ambiente. El grano fino endurece, como dice la teoría.</p>
+    <div class="plot"><canvas id="ch-cantor"></canvas></div></article>
+   <article class="glass card c5 rv" style="--d:.1s"><h3>Resultado del ajuste</h3><p class="sub">σy = σ₀ + k·d<sup>−½</sup></p>
+    <div class="out"><div><b id="c-s0">—</b><span>σ₀ (MPa)</span></div><div><b id="c-k">—</b><span>k (MPa·µm<sup>½</sup>)</span></div><div><b id="c-r2">—</b><span>R²</span></div><div><b id="c-n">—</b><span>puntos</span></div></div>
+    <p class="note">Otto et al. (2013) reportaron k = 494 para esta misma aleación. La pendiente sale casi igual; la ordenada es más alta porque aquí se mezclan artículos con recocidos y criterios de grano distintos.</p></article>
+  </div>
+ </section>
+
+ <section class="sec" id="conclusiones">
+  <header class="rv"><h2>Conclusiones y límites</h2><p>Lo que muestran los datos y lo que no pueden probar.</p></header>
+  <div class="grid">
+   <div class="c7 concl">
+    <div class="mini-card glass rv"><span class="no">1</span><div><b>La estructura separa la resistencia.</b><p>BCC/B2 con mediana de 1,253 MPa contra 387 MPa de las FCC: 3.3 veces, con IC 95 % de 2.5 a 4.1. Aparece en tensión, en compresión y sin polvos ni deformados.</p></div></div>
+    <div class="mini-card glass rv" style="--d:.08s"><span class="no">2</span><div><b>El VEC indica la fase, no la resistencia.</b><p>−0.56 en global, −0.19 en FCC y +0.26 en BCC/B2.</p></div></div>
+    <div class="mini-card glass rv" style="--d:.16s"><span class="no">3</span><div><b>Tabor sirve en BCC/B2 y falla en FCC.</b><p>Razón de 0.91 contra 0.52. La explicación es el endurecimiento por deformación de las FCC, pero sin curvas esfuerzo-deformación es una interpretación, no una prueba.</p></div></div>
+    <div class="mini-card glass rv" style="--d:.24s"><span class="no">4</span><div><b>Una sola variable no basta.</b><p>Una relación que se ve buena en general puede esconder dos poblaciones distintas.</p></div></div>
+   </div>
+   <article class="glass card c5 rv" style="--d:.1s"><h3>Limitaciones</h3>
+    <ul style="margin:8px 0 0;padding-left:18px;color:var(--mute);font-size:13.5px;line-height:1.55">
+     <li>Asociación, no causalidad: fase, composición y proceso van juntos.</li>
+     <li>Cada artículo usó su equipo, su velocidad de deformación y su criterio de YS.</li>
+     <li>Sesgo de publicación: solo están las aleaciones que salieron bien.</li>
+     <li>Solo 10 aleaciones FCC con grano, YS y dureza a la vez.</li>
+     <li>Dureza y YS no siempre vienen de la misma probeta.</li>
+     <li>No se analizó la composición elemento por elemento.</li></ul></article>
+  </div>
+ </section>
+
+ <footer class="glass rv">
+  <b>Referencias</b>
+  <div class="refs" style="margin-top:12px">
+   <p>Borg, C. K. H. et al. (2020). Expanded dataset of mechanical properties and observed phases of multi-principal element alloys. <i>Scientific Data, 7</i>, 430. <a href="https://doi.org/10.1038/s41597-020-00768-9" target="_blank" rel="noopener">doi:10.1038/s41597-020-00768-9</a></p>
+   <p>Cahoon, J. R., Broughton, W. H., &amp; Kutzak, A. R. (1971). The determination of yield strength from hardness measurements. <i>Metall. Trans., 2</i>, 1979–1983. <a href="https://doi.org/10.1007/bf02913433" target="_blank" rel="noopener">doi:10.1007/bf02913433</a></p>
+   <p>George, E. P., Raabe, D., &amp; Ritchie, R. O. (2019). High-entropy alloys. <i>Nat. Rev. Mater., 4</i>, 515–534. <a href="https://doi.org/10.1038/s41578-019-0121-4" target="_blank" rel="noopener">doi:10.1038/s41578-019-0121-4</a></p>
+   <p>Gorsse, S., Nguyen, M. H., Senkov, O. N., &amp; Miracle, D. B. (2018). Database on the mechanical properties of high entropy alloys and complex concentrated alloys. <i>Data in Brief, 21</i>, 2664–2678. <a href="https://doi.org/10.1016/j.dib.2018.11.111" target="_blank" rel="noopener">doi:10.1016/j.dib.2018.11.111</a></p>
+   <p>Guo, S., Ng, C., Lu, J., &amp; Liu, C. T. (2011). Effect of valence electron concentration on stability of fcc or bcc phase in high entropy alloys. <i>J. Appl. Phys., 109</i>, 103505. <a href="https://doi.org/10.1063/1.3587228" target="_blank" rel="noopener">doi:10.1063/1.3587228</a></p>
+   <p>Miracle, D. B., &amp; Senkov, O. N. (2017). A critical review of high entropy alloys and related concepts. <i>Acta Mater., 122</i>, 448–511. <a href="https://doi.org/10.1016/j.actamat.2016.08.081" target="_blank" rel="noopener">doi:10.1016/j.actamat.2016.08.081</a></p>
+   <p>Otto, F. et al. (2013). The influences of temperature and microstructure on the tensile properties of a CoCrFeMnNi high-entropy alloy. <i>Acta Mater., 61</i>, 5743–5755. <a href="https://doi.org/10.1016/j.actamat.2013.06.018" target="_blank" rel="noopener">doi:10.1016/j.actamat.2013.06.018</a></p>
+   <p>Pavlina, E. J., &amp; Van Tyne, C. J. (2008). Correlation of yield strength and tensile strength with hardness for steels. <i>J. Mater. Eng. Perform., 17</i>, 888–893. <a href="https://doi.org/10.1007/s11665-008-9225-5" target="_blank" rel="noopener">doi:10.1007/s11665-008-9225-5</a></p>
+   <p>Senkov, O. N., Wilks, G. B., Scott, J. M., &amp; Miracle, D. B. (2011). Mechanical properties of Nb25Mo25Ta25W25 and V20Nb20Mo20Ta20W20 refractory high entropy alloys. <i>Intermetallics, 19</i>, 698–706. <a href="https://doi.org/10.1016/j.intermet.2011.01.004" target="_blank" rel="noopener">doi:10.1016/j.intermet.2011.01.004</a></p>
+   <p>Zhang, P., Li, S. X., &amp; Zhang, Z. F. (2011). General relationship between strength and hardness. <i>Mater. Sci. Eng. A, 529</i>, 62–73. <a href="https://doi.org/10.1016/j.msea.2011.08.061" target="_blank" rel="noopener">doi:10.1016/j.msea.2011.08.061</a></p>
+  </div>
+  <p style="margin-top:12px;color:var(--dim)">Ingeniería de Materiales 1570, grupo 5 · Dataset 3 depurado en la etapa 1 (1,527 registros) · Análisis de las etapas 1 y 2.</p>
  </footer>
-</div>
+
 
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" aria-hidden="true"><div class="glass" id="dbody"></div></aside>
@@ -288,7 +494,7 @@ document.getElementById('reset').onclick=()=>{resetState();document.getElementBy
 
 /* ---------- gráficas ---------- */
 Chart.defaults.color='#b4b4c2';Chart.defaults.font.family="'Inter',system-ui,sans-serif";Chart.defaults.font.size=12;
-Chart.defaults.animation=false;Chart.defaults.maintainAspectRatio=false;Chart.defaults.responsive=true;
+Chart.defaults.animation={duration:1000,easing:'easeOutQuart'};Chart.defaults.maintainAspectRatio=false;Chart.defaults.responsive=true;
 Chart.defaults.plugins.legend.display=false;
 Object.assign(Chart.defaults.plugins.tooltip,{backgroundColor:'rgba(16,16,24,.92)',borderColor:'rgba(255,255,255,.2)',borderWidth:1,padding:10,titleColor:'#fff',bodyColor:'#d6d6e0',cornerRadius:12});
 const GRID='rgba(255,255,255,.07)';
@@ -442,7 +648,137 @@ $('scrim').onclick=closeD;addEventListener('keydown',e=>{if(e.key==='Escape')clo
 document.addEventListener('pointermove',e=>{const g=e.target.closest&&e.target.closest('.glass');if(!g)return;const b=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-b.left)+'px');g.style.setProperty('--my',(e.clientY-b.top)+'px')});
 const links=[...document.querySelectorAll('.nav a')];
 const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id))}})},{rootMargin:'-30% 0px -60% 0px'});
-['resumen','propiedades','estructura','proceso','tabla'].forEach(id=>io.observe($(id)));
+['resumen','limpieza','hipotesis','familias','tabor','explorador','consistencia','conclusiones'].forEach(id=>io.observe($(id)));
+
+/* ================== recorrido de las etapas 1 y 2 ================== */
+const isAmb=r=>r[K.T]!=null&&Math.abs(r[K.T]-25)<=5;
+const quant=(a,p)=>{a=a.slice().sort((x,y)=>x-y);const i=(a.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return a[lo]+(a[hi]-a[lo])*(i-lo)};
+function ranks(a){const idx=a.map((v,i)=>[v,i]).sort((x,y)=>x[0]-y[0]);const r=Array(a.length);let i=0;while(i<idx.length){let j=i;while(j+1<idx.length&&idx[j+1][0]===idx[i][0])j++;const av=(i+j)/2+1;for(let k=i;k<=j;k++)r[idx[k][1]]=av;i=j+1}return r}
+function pearson(x,y){const n=x.length,mx=x.reduce((a,b)=>a+b,0)/n,my=y.reduce((a,b)=>a+b,0)/n;let sxy=0,sxx=0,syy=0;for(let i=0;i<n;i++){const dx=x[i]-mx,dy=y[i]-my;sxy+=dx*dy;sxx+=dx*dx;syy+=dy*dy}return sxy/Math.sqrt(sxx*syy)}
+const spearman=(x,y)=>pearson(ranks(x),ranks(y));
+function cles(A,B){let s=0;for(const a of A)for(const b of B)s+=a>b?1:a===b?.5:0;return s/(A.length*B.length)}
+function polyfit(x,y){const n=x.length,sx=x.reduce((a,b)=>a+b,0),sy=y.reduce((a,b)=>a+b,0),sxx=x.reduce((a,b)=>a+b*b,0),sxy=x.reduce((a,b,i)=>a+b*y[i],0);const k=(n*sxy-sx*sy)/(n*sxx-sx*sx);return [k,(sy-k*sx)/n,Math.pow(pearson(x,y),2)]}
+const minus=s=>String(s).replace('-','−');
+const BASE=R.filter(r=>isAmb(r)&&r[K.ys]!=null&&r[K.fam]!=='Sin dato');
+const ORD=['FCC','FCC + IM','Otras','FCC + BCC','BCC/B2','BCC + IM'];
+const dot=n=>`<i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${FC[n]};margin-right:8px"></i>`;
+
+/* embudo de selección */
+(function(){
+  const steps=[['Dataset limpio de la etapa 1',R.length,''],['Solo temperatura ambiente',R.filter(isAmb).length,''],['… que tienen YS',R.filter(r=>isAmb(r)&&r[K.ys]!=null).length,''],['… y tienen familia de fases',BASE.length,'']];
+  $('funnel').innerHTML=steps.map((s,i)=>{const loss=i?`−${fmt(steps[i-1][1]-s[1])} filas`:'';
+    return `<div class="fn"><div><b>${s[0]}</b><small>${loss}</small></div><div class="tr"><div class="fill" style="--w:${Math.max(s[1]/R.length*100,12)}%;--d:${i*.25}s">${fmt(s[1])}</div></div></div>`}).join('');
+})();
+
+/* datos faltantes */
+(function(){
+  const defs=[['YS',r=>r[K.ys]==null],['Elongación',r=>r[K.el]==null],['UTS',r=>r[K.uts]==null],['Dureza HV',r=>r[K.hv]==null],['Tamaño de grano',r=>r[K.gr]==null],['Módulo E medido',r=>r[K.E]==null],['Temperatura',r=>r[K.T]==null],['Familia de fases',r=>r[K.fam]==='Sin dato']];
+  $('miss').innerHTML=defs.map(([n,f])=>{const p=R.filter(f).length/R.length*100;const c=p>80?'var(--pink)':'var(--sky)';
+    return `<div class="mrow"><span>${n}</span><div class="pcell"><i style="--w:${p.toFixed(1)}%;background:${c}"></i></div><b>${p.toFixed(0)} %</b></div>`}).join('');
+})();
+
+/* diagrama de cajas por familia */
+let bxE='Todos';
+(function(){const seg=$('bx-seg');['Todos','Tensión','Compresión'].forEach(e=>{const b=document.createElement('div');b.className='chip'+(e===bxE?' on':'');b.tabIndex=0;b.textContent=e;b.setAttribute('role','switch');
+  const go=()=>{bxE=e;seg.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.textContent===e));drawBox()};b.onclick=go;b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();go()}};seg.appendChild(b)})})();
+function drawBox(){
+  const W=900,rowH=60,top=10,left=132,right=30,XM=3600,sx=v=>left+v/XM*(W-left-right),H=top+ORD.length*rowH+36;
+  let s=`<svg class="bsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Diagrama de cajas del YS por familia">`;
+  for(let v=0;v<=XM;v+=500)s+=`<line class="gl" x1="${sx(v)}" x2="${sx(v)}" y1="${top}" y2="${H-30}"/><text x="${sx(v)}" y="${H-12}" text-anchor="middle">${fmt(v)}</text>`;
+  s+=`<text x="${(left+W-right)/2}" y="${H}" text-anchor="middle" style="fill:#7d7d8c">YS (MPa)</text>`;
+  ORD.forEach((f,i)=>{
+    const v=BASE.filter(r=>r[K.fam]===f&&(bxE==='Todos'||r[K.ens]===bxE)).map(r=>r[K.ys]).sort((a,b)=>a-b);const y=top+i*rowH+rowH/2,d=(i*.1)+'s';
+    s+=`<text class="lab" x="${left-14}" y="${y-3}" text-anchor="end">${f}</text><text x="${left-14}" y="${y+13}" text-anchor="end" style="fill:#7d7d8c">n = ${v.length}</text>`;
+    if(v.length<4){s+=`<text x="${left+6}" y="${y+4}" style="fill:#7d7d8c">sin datos suficientes</text>`;return}
+    const q1=quant(v,.25),m=quant(v,.5),q3=quant(v,.75),iq=q3-q1,lo=v.find(x=>x>=q1-1.5*iq),hi=[...v].reverse().find(x=>x<=q3+1.5*iq),c=FC[f];
+    s+=`<line class="bx" style="--d:${d}" x1="${sx(lo)}" x2="${sx(hi)}" y1="${y}" y2="${y}" stroke="${c}" stroke-width="2"/>`;
+    s+=`<rect class="bx" style="--d:${d}" x="${sx(q1)}" y="${y-17}" width="${Math.max(sx(q3)-sx(q1),2)}" height="34" rx="8" fill="${c}" fill-opacity=".38" stroke="${c}" stroke-width="1.6"/>`;
+    s+=`<line class="od" x1="${sx(m)}" x2="${sx(m)}" y1="${y-17}" y2="${y+17}" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`;
+    v.filter(x=>x<lo||x>hi).forEach(x=>{s+=`<circle class="od" cx="${sx(x)}" cy="${y}" r="3" fill="${c}"/>`});
+    s+=`<text class="od" x="${sx(m)}" y="${y-23}" text-anchor="middle" style="fill:#ececf1;font-weight:600">${fmt(m)}</text>`;
+  });
+  $('boxwrap').innerHTML=s+'</svg>';
+  const card=$('boxwrap').closest('.rv');if(card&&card.classList.contains('in'))requestAnimationFrame(()=>requestAnimationFrame(()=>$('boxwrap').querySelector('svg').classList.add('go')));
+}
+drawBox();
+
+/* comparación por pares */
+(function(){
+  const pairs=[['BCC/B2','FCC','< 0.001'],['BCC + IM','BCC/B2','< 0.001'],['FCC + BCC','FCC','< 0.001'],['FCC + IM','FCC','0.004']];
+  const ys=f=>BASE.filter(r=>r[K.fam]===f).map(r=>r[K.ys]);
+  $('pairs').innerHTML=pairs.map(([a,b,p])=>{const P=cles(ys(a),ys(b));
+    return `<tr><td>${dot(a)}${a}</td><td>${dot(b)}${b}</td><td><span style="display:inline-block;width:100px;height:8px;border-radius:99px;background:rgba(255,255,255,.08);vertical-align:middle;margin-right:8px"><i class="pbar" style="--w:${(P*100).toFixed(0)}%"></i></span><b>${(P*100).toFixed(0)} %</b></td><td class="lbl">${p}</td></tr>`}).join('');
+})();
+
+/* comprobaciones: tensión, compresión, sin polvos ni deformados */
+(function(){
+  const sets=[['Solo tensión',r=>r[K.ens]==='Tensión'],['Solo compresión',r=>r[K.ens]==='Compresión'],['Solo colada y colada + recocido',r=>r[K.ruta]==='Colada'||r[K.ruta]==='Colada + recocido']];
+  $('checks').innerHTML=sets.map(([n,f])=>{const A=BASE.filter(r=>f(r)&&r[K.fam]==='BCC/B2').map(r=>r[K.ys]),B=BASE.filter(r=>f(r)&&r[K.fam]==='FCC').map(r=>r[K.ys]);const P=cles(A,B);
+    return `<div style="margin:10px 0"><div class="mrow" style="margin:0 0 4px"><span>${n}</span><div class="pcell"><i style="--w:${(P*100).toFixed(0)}%;background:linear-gradient(90deg,var(--sky),var(--pink))"></i></div><b>${(P*100).toFixed(0)} %</b></div>
+     <div class="lbl" style="font-size:12.5px">BCC/B2 ${fmt(med(A))} MPa (n = ${A.length}) frente a FCC ${fmt(med(B))} MPa (n = ${B.length})</div></div>`}).join('');
+})();
+
+/* VEC contra YS y Spearman */
+(function(){
+  scatter('ch-vecys','VEC (e⁻/átomo)','YS (MPa)',{tip:p=>`YS ${fmt(p.ys)} MPa`});
+  const ds=ptsByFam(BASE,K.vec,K.ys);$('lg-vec').innerHTML=legendHTML(ds);
+  ds.push({label:'VEC 6.87',type:'line',data:[{x:6.87,y:0},{x:6.87,y:3500}],borderColor:'#ff6b1a',borderDash:[5,4],borderWidth:1.5,pointRadius:0});
+  ds.push({label:'VEC 8',type:'line',data:[{x:8,y:0},{x:8,y:3500}],borderColor:'#4fc3f7',borderDash:[5,4],borderWidth:1.5,pointRadius:0});
+  setData('ch-vecys',ds);
+  const sub=[['Todas',()=>true],['Solo compresión',r=>r[K.ens]==='Compresión'],['Solo tensión',r=>r[K.ens]==='Tensión'],['Solo FCC',r=>r[K.fam]==='FCC'],['Solo BCC/B2',r=>r[K.fam]==='BCC/B2'],['Solo FCC + BCC',r=>r[K.fam]==='FCC + BCC']];
+  $('spear').innerHTML=sub.map(([n,f])=>{const rows=BASE.filter(f);const rho=spearman(rows.map(r=>r[K.vec]),rows.map(r=>r[K.ys]));const w=Math.abs(rho)*50;
+    return `<div class="ratio" style="grid-template-columns:120px 1fr 52px"><span>${n}<br><small style="color:var(--dim)">n = ${rows.length}</small></span><div class="tr"><div class="one" style="left:50%;opacity:.4"></div><div class="dvb" style="--w:${w.toFixed(1)}%;${rho<0?'right:50%;background:var(--pink)':'left:50%;background:var(--sky)'}"></div></div><b>${minus(rho.toFixed(2))}</b></div>`}).join('');
+})();
+
+/* Tabor */
+const TAB=R.filter(r=>isAmb(r)&&r[K.ys]!=null&&r[K.hv]!=null);
+const ratioBy={};
+(function(){
+  scatter('ch-tabor','Dureza (HV)','YS (MPa)',{tip:p=>`HV ${fmt(p.hv)} · YS ${fmt(p.ys)} MPa`,x:{min:0},y:{min:0}});
+  const ds=ptsByFam(TAB,K.hv,K.ys);$('lg-tab').innerHTML=legendHTML(ds);
+  const [k,b]=polyfit(TAB.map(r=>r[K.hv]),TAB.map(r=>r[K.ys]));const rho=spearman(TAB.map(r=>r[K.hv]),TAB.map(r=>r[K.ys]));
+  ds.push({label:'Tabor',type:'line',data:[{x:0,y:0},{x:1200,y:1200*9.807/3}],borderColor:'#ffffff',borderDash:[6,4],borderWidth:2,pointRadius:0});
+  ds.push({label:'Ajuste',type:'line',data:[{x:0,y:b},{x:1200,y:b*1+k*1200}],borderColor:'#ff4d8d',borderWidth:2,pointRadius:0});
+  setData('ch-tabor',ds);
+  $('n-tabor').innerHTML=`Ajuste: YS = <b>${k.toFixed(2)}</b>·HV + <b>${b.toFixed(0)}</b> (Tabor: pendiente 3.27). Spearman ρ = <b>${rho.toFixed(2)}</b> con n = ${TAB.length}.`;
+  const fams=ORD.map(f=>{const v=TAB.filter(r=>r[K.fam]===f).map(r=>r[K.ys]/(r[K.hv]*9.807/3));return {f,n:v.length,m:med(v),q1:quant(v,.25),q3:quant(v,.75)}}).filter(x=>x.n).sort((a,b)=>a.m-b.m);
+  fams.forEach(x=>ratioBy[x.f]=x);
+  const MAXR=1.5;
+  $('ratios').innerHTML=fams.map(x=>`<div class="ratio"><span>${x.f}<br><small style="color:var(--dim)">n = ${x.n}</small></span><div class="tr"><div class="f" style="--w:${x.m/MAXR*100}%;background:${FC[x.f]}"></div><div class="iq" style="left:${x.q1/MAXR*100}%;width:${(x.q3-x.q1)/MAXR*100}%"></div><div class="one" style="left:${100/MAXR}%"></div></div><b>${x.m.toFixed(2)}</b></div>`).join('');
+  const sel=$('hv-f');sel.innerHTML=fams.map(x=>`<option value="${x.f}">${x.f}</option>`).join('');sel.value='BCC/B2';
+})();
+const tw={};
+function setNum(el,to,suf=' MPa'){const from=tw[el.id]??0;tw[el.id]=to;const t0=performance.now();const st=t=>{const p=Math.min(1,(t-t0)/450),e=1-Math.pow(1-p,3);el.textContent=fmt(from+(to-from)*e)+suf;if(p<1)requestAnimationFrame(st)};requestAnimationFrame(st)}
+function calc(){const hv=+$('hv-r').value,f=$('hv-f').value,x=ratioBy[f];$('hv-v').textContent=hv+' HV';
+  const t=hv*9.807/3;setNum($('o-t'),t);setNum($('o-c'),t*x.m);$('o-cs').textContent=`YS corregido con la razón mediana de ${f} (${x.m.toFixed(2)}). Rango intercuartil: ${fmt(t*x.q1)} a ${fmt(t*x.q3)} MPa.`}
+$('hv-r').oninput=calc;$('hv-f').onchange=calc;calc();
+
+/* Hall–Petch de la aleación de Cantor */
+(function(){
+  const cantor=r=>{const c=r[K.comp];return c.length===5&&['Co','Cr','Fe','Mn','Ni'].every(e=>c.some(s=>s.startsWith(e+' ')&&Math.abs(parseFloat(s.split(' ')[1])-20)<.1))};
+  const rows=R.filter(r=>cantor(r)&&r[K.ens]==='Tensión'&&isAmb(r)&&r[K.gr]>0&&r[K.ys]!=null);
+  const x=rows.map(r=>1/Math.sqrt(r[K.gr])),y=rows.map(r=>r[K.ys]);const [k,s0,r2]=polyfit(x,y);
+  $('c-s0').textContent=fmt(s0);$('c-k').textContent=fmt(k);$('c-r2').textContent=r2.toFixed(2);$('c-n').textContent=rows.length;
+  const x1=Math.max(...x)*1.05;
+  new Chart($('ch-cantor'),{type:'scatter',data:{datasets:[{label:'CoCrFeMnNi',data:rows.map((r,i)=>({x:x[i],y:y[i],gr:r[K.gr]})),backgroundColor:'#4fc3f7cc',borderColor:'#4fc3f7',pointRadius:5.5,pointHoverRadius:8},
+    {label:'Ajuste',type:'line',data:[{x:0,y:s0},{x:x1,y:s0+k*x1}],borderColor:'#ff6b1a',borderWidth:2.4,pointRadius:0}]},
+   options:{scales:{x:ax('d^−½ (µm^−½)',{min:0}),y:ax('YS (MPa)',{min:0})},plugins:{tooltip:{callbacks:{label:c=>c.raw.gr?`grano ${fmt(c.raw.gr,1)} µm · YS ${fmt(c.raw.y)} MPa`:'Ajuste lineal'}}}}});
+})();
+
+/* ============ animaciones: aparición, contadores y gráficas ============ */
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function countUp(el){const to=+el.dataset.count,dec=+(el.dataset.dec||0),suf=el.dataset.suf||'';const out=v=>v.toLocaleString('es-MX',{minimumFractionDigits:dec,maximumFractionDigits:dec})+suf;
+  if(RM){el.textContent=out(to);return}const t0=performance.now(),dur=1500;const st=t=>{const p=Math.min(1,(t-t0)/dur);el.textContent=out(to*(1-Math.pow(1-p,4)));if(p<1)requestAnimationFrame(st)};requestAnimationFrame(st)}
+function reveal(el){
+  if(el.dataset.done)return;el.dataset.done=1;el.classList.add('in');
+  el.querySelectorAll('[data-count]').forEach(countUp);if(el.dataset.count)countUp(el);
+  el.querySelectorAll('.bsvg').forEach(s=>requestAnimationFrame(()=>requestAnimationFrame(()=>s.classList.add('go'))));
+  el.querySelectorAll('canvas').forEach(c=>{const ch=Chart.getChart(c);if(ch){ch.reset();ch.update()}});
+}
+document.querySelectorAll('.filters,#propiedades>header,#propiedades .card,#fases>header,#fases .card,#proceso>header,#proceso .card,#tabla>header,#tabla .card').forEach((e,i)=>{e.classList.add('rv');e.style.setProperty('--d',((i%3)*.08)+'s')});
+const rvIO=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){reveal(en.target);rvIO.unobserve(en.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'}):null;
+document.querySelectorAll('.rv,#hkpis').forEach(e=>{if(rvIO)rvIO.observe(e);else reveal(e)});
+if(!rvIO)document.querySelectorAll('.bsvg').forEach(s=>s.classList.add('go'));
 
 update();
 </script>
