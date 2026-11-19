@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atlas de Aleaciones de Alta Entropía</title>
+<meta name="description" content="Dashboard interactivo del Dataset 3: 1,527 registros de aleaciones de alta entropía con propiedades mecánicas, estructura y procesamiento.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: lienzo oscuro con luz de color detrás; todo el contenido flota en paneles de vidrio líquido.
+   Barra de navegación en píldora, filtros fijos arriba, rejilla de gráficas, tabla y panel de detalle. */
+:root{
+  --bg:#08080b; --fg:#f2f2f6; --mute:#a3a3b2; --dim:#6f6f7e;
+  --fire:#ff6b1a; --fire2:#ffa23a; --pink:#ff4d8d; --sky:#4fc3f7; --violet:#a78bfa; --mint:#5eead4;
+  --glass:rgba(255,255,255,.07); --glass2:rgba(255,255,255,.12); --edge:rgba(255,255,255,.16); --hi:rgba(255,255,255,.42);
+  --disp:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);min-height:100vh;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 60px;overflow-x:hidden}
+.wrap{max-width:1360px;margin:0 auto;position:relative;z-index:1}
+h1,h2,h3{font-family:var(--disp);margin:0;letter-spacing:-.015em;text-wrap:balance}
+h2{font-size:22px} h3{font-size:15px;font-weight:600}
+p{margin:0}
+
+/* luz de fondo */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+.bg i:nth-child(1){width:48vw;height:48vw;left:-10vw;top:-8vw;background:radial-gradient(circle,var(--fire),transparent 68%);animation:d1 26s ease-in-out infinite alternate}
+.bg i:nth-child(2){width:42vw;height:42vw;right:-8vw;top:14vh;background:radial-gradient(circle,var(--pink),transparent 68%);animation:d2 32s ease-in-out infinite alternate}
+.bg i:nth-child(3){width:46vw;height:46vw;left:22vw;bottom:-18vw;background:radial-gradient(circle,var(--sky),transparent 66%);opacity:.4;animation:d3 36s ease-in-out infinite alternate}
+.bg i:nth-child(4){width:30vw;height:30vw;right:18vw;bottom:8vh;background:radial-gradient(circle,var(--violet),transparent 66%);opacity:.3;animation:d1 40s ease-in-out infinite alternate-reverse}
+@keyframes d1{to{transform:translate(8vw,10vh) scale(1.15)}}
+@keyframes d2{to{transform:translate(-9vw,6vh) scale(.9)}}
+@keyframes d3{to{transform:translate(-6vw,-8vh) scale(1.2)}}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+
+/* vidrio líquido */
+.glass{position:relative;border-radius:26px;border:1px solid var(--edge);
+  background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.035) 55%,rgba(255,255,255,.07));
+  -webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+  box-shadow:inset 0 1.5px 1px var(--hi),inset 0 -1px 1px rgba(255,255,255,.08),inset 0 0 28px rgba(255,255,255,.035),0 28px 60px -24px rgba(0,0,0,.7)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(420px 220px at var(--mx,18%) var(--my,0%),rgba(255,255,255,.2),transparent 62%);mix-blend-mode:screen;opacity:.9;transition:opacity .3s}
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;
+  background:linear-gradient(140deg,rgba(255,255,255,.55),rgba(255,255,255,0) 30%,rgba(255,255,255,0) 70%,rgba(255,255,255,.28));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.pad{padding:20px}
+
+/* navegación */
+.nav{position:sticky;top:max(10px,env(safe-area-inset-top,0px));z-index:30;display:flex;align-items:center;gap:6px;padding:8px 10px 8px 18px;border-radius:999px;margin-bottom:22px;flex-wrap:wrap}
+.brand{font:700 15px var(--disp);display:flex;align-items:center;gap:10px;margin-right:auto;white-space:nowrap}
+.dot{width:12px;height:12px;border-radius:50%;background:conic-gradient(var(--fire),var(--pink),var(--sky),var(--fire));box-shadow:0 0 14px var(--fire)}
+.nav a{color:var(--mute);text-decoration:none;font-weight:500;padding:8px 14px;border-radius:999px;transition:.2s}
+.nav a:hover,.nav a.on{color:var(--fg);background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+
+/* hero */
+.hero{padding:34px 34px 30px;margin-bottom:18px}
+.hero h1{font-size:clamp(34px,5.4vw,66px);line-height:1;max-width:16ch}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--fire),var(--fire2) 40%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mute);max-width:62ch;margin-top:16px;font-size:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:26px}
+.kpi{padding:16px 18px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.kpi b{display:block;font:700 30px/1.1 var(--disp);font-variant-numeric:tabular-nums}
+.kpi span{color:var(--mute);font-size:13px}
+.kpi small{display:block;color:var(--dim);font-size:11.5px;margin-top:2px}
+
+/* filtros */
+.filters{padding:18px 20px;margin-bottom:18px;display:grid;gap:14px}
+.frow{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.frow>label{font:600 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);min-width:92px}
+.chip{font:500 13px var(--body);color:var(--mute);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:6px 13px;cursor:pointer;transition:.18s;user-select:none}
+.chip:hover{color:var(--fg);border-color:rgba(255,255,255,.3)}
+.chip.on{color:#1b0b00;background:linear-gradient(90deg,var(--fire),var(--fire2));border-color:transparent;font-weight:600;box-shadow:0 6px 20px -8px var(--fire)}
+.chip .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
+input[type=search],select{font:400 14px var(--body);color:var(--fg);background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:8px 12px;min-width:0}
+input[type=search]{width:min(240px,100%)}
+select{color-scheme:dark}
+input[type=range]{accent-color:var(--fire);width:180px;max-width:100%}
+.reset{margin-left:auto}
+button{font:600 13px var(--body);color:var(--fg);background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:8px 14px;cursor:pointer;transition:.18s}
+button:hover{background:rgba(255,255,255,.16)}
+button:focus-visible,.chip:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,th:focus-visible,tr:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.count{color:var(--fire2);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* gráficas */
+.sec{margin-top:34px}
+.sec>header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bottom:14px;padding:0 6px}
+.sec>header p{color:var(--mute);font-size:14px;max-width:70ch}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.c12{grid-column:span 12}.c8{grid-column:span 8}.c7{grid-column:span 7}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}
+.card{padding:18px 18px 14px;min-width:0}
+.card h3{margin-bottom:2px}
+.card .sub{color:var(--mute);font-size:13px;margin-bottom:10px}
+.plot{position:relative;height:340px}
+.plot.tall{height:400px}.plot.short{height:280px}
+.note{margin-top:10px;font-size:12.5px;color:var(--mute)}
+.note b{color:var(--fire2);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;color:var(--mute);margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.empty{position:absolute;inset:0;display:none;place-items:center;color:var(--dim);text-align:center;padding:20px}
+
+/* tabla */
+.twrap{overflow-x:auto;border-radius:18px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);white-space:nowrap}
+th{font:600 11.5px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--dim);cursor:pointer;position:sticky;top:0;background:rgba(14,14,20,.7);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+th.s::after{content:" ▾";color:var(--fire2)}th.s.asc::after{content:" ▴"}
+tbody tr{cursor:pointer;transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,.07)}
+td.f{font-family:var(--mono);font-size:13px}
+td.n{text-align:right}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;border:1px solid rgba(255,255,255,.14)}
+.more{margin:14px auto 0;display:block}
+
+/* detalle */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);z-index:50;padding:max(16px,env(safe-area-inset-top,0px)) 16px 16px;transform:translateX(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.drawer.open{transform:none;pointer-events:auto}
+.drawer .glass{height:100%;overflow:auto;padding:22px;background:linear-gradient(135deg,rgba(30,30,40,.72),rgba(20,20,28,.6))}
+.dh{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.dh h2{font-size:26px;word-break:break-word}
+.x{flex:none;width:36px;height:36px;border-radius:50%;padding:0;font-size:16px}
+.kv{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+.kv div{padding:11px 13px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.kv b{display:block;font:700 20px var(--disp)}.kv span{font-size:12px;color:var(--mute)}
+.bar{display:flex;height:34px;border-radius:12px;overflow:hidden;margin:8px 0 10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.bar i{display:grid;place-items:center;font:600 11.5px var(--body);color:#10101a;min-width:0;overflow:hidden}
+.mini{font-size:13px;color:var(--mute);margin-top:8px}
+.mini a{color:var(--sky)}
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.3s}
+.scrim.on{opacity:1;pointer-events:auto}
+
+footer{margin-top:40px;padding:22px 26px;color:var(--mute);font-size:13px}
+footer b{color:var(--fg)}
+footer ul{margin:8px 0 0;padding-left:18px}footer li{margin:3px 0}
+
+@media (max-width:1000px){.c8,.c7,.c6,.c5,.c4{grid-column:span 12}.plot,.plot.tall{height:300px}}
+@media (max-width:640px){.hero{padding:24px 20px}.nav{border-radius:24px}.frow>label{min-width:100%}.reset{margin-left:0}}
+@media (prefers-reduced-motion:reduce){.bg i{animation:none}*{transition:none!important;scroll-behavior:auto}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass{background:rgba(30,30,40,.88)}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="wrap">
+ <nav class="nav glass" aria-label="Secciones">
+  <div class="brand"><span class="dot"></span>Atlas HEA</div>
+  <a href="#resumen" class="on">Resumen</a><a href="#propiedades">Propiedades</a><a href="#estructura">Estructura</a><a href="#proceso">Proceso y temperatura</a><a href="#tabla">Registros</a>
+ </nav>
+
+ <header class="hero glass" id="resumen">
+  <h1>Aleaciones de <em>alta entropía</em>, en datos</h1>
+  <p>Explora 1,527 registros del Dataset 3: cuánta resistencia y ductilidad logran, qué estructura cristalina las sostiene y cómo cambian con el procesamiento y la temperatura. Filtra arriba y todo se recalcula.</p>
+  <div class="kpis" id="kpis"></div>
+ </header>
+
+ <section class="filters glass" aria-label="Filtros">
+  <div class="frow"><label>Estructura</label><div class="frow" id="f-fam"></div></div>
+  <div class="frow"><label>Ensayo</label><div class="frow" id="f-ens"></div>
+   <label style="min-width:auto;margin-left:14px">Proceso</label><div class="frow" id="f-ruta"></div></div>
+  <div class="frow"><label>Elementos</label><div class="frow" id="f-el"></div></div>
+  <div class="frow"><label>Temperatura</label>
+   <div class="chip on" id="f-amb" role="switch" aria-checked="true" tabindex="0">Solo ambiente (≈25 °C)</div>
+   <input type="range" id="f-tmax" min="25" max="1600" step="25" value="1600" aria-label="Temperatura máxima"><span id="f-tl" class="count"></span>
+   <input type="search" id="f-q" placeholder="Buscar fórmula, ej. CoCrFeNi" aria-label="Buscar fórmula">
+   <button class="reset" id="reset">Limpiar filtros</button>
+   <span><span class="count" id="f-n"></span> registros</span></div>
+ </section>
+
+ <section class="sec" id="propiedades">
+  <header><h2>Propiedades mecánicas</h2><p>Los puntos de compresión (triángulos) y tensión (círculos) no se comparan directamente: la compresión suele dar valores más altos de resistencia.</p></header>
+  <div class="grid">
+   <article class="glass card c7"><h3>Resistencia contra ductilidad</h3><p class="sub">Esfuerzo de cedencia (YS) y elongación a la fractura. La esquina superior derecha es lo ideal.</p>
+    <div class="legend" id="lg1"></div><div class="plot tall"><canvas id="ch-ysel"></canvas><div class="empty" id="e-ysel">Sin registros con los dos datos en este filtro.</div></div>
+    <p class="note" id="n-ysel"></p></article>
+   <article class="glass card c5"><h3>Resistencia específica</h3><p class="sub">YS contra densidad calculada. Arriba y a la izquierda: fuerte y ligera.</p>
+    <div class="plot tall"><canvas id="ch-rho"></canvas><div class="empty" id="e-rho">Sin datos.</div></div>
+    <p class="note" id="n-rho"></p></article>
+   <article class="glass card c4"><h3>Distribución de YS</h3><p class="sub">Registros por intervalo de 200 MPa.</p>
+    <div class="plot short"><canvas id="ch-hist"></canvas></div></article>
+   <article class="glass card c4"><h3>Dureza y resistencia</h3><p class="sub">Vickers (HV) contra YS. Se espera una razón cercana a 3.</p>
+    <div class="plot short"><canvas id="ch-hv"></canvas><div class="empty" id="e-hv">Sin datos.</div></div></article>
+   <article class="glass card c4"><h3>Tamaño de grano y resistencia</h3><p class="sub">Relación de Hall–Petch: YS contra d<sup>−½</sup>.</p>
+    <div class="plot short"><canvas id="ch-hp"></canvas><div class="empty" id="e-hp">Sin datos.</div></div>
+    <p class="note" id="n-hp"></p></article>
+  </div>
+ </section>
+
+ <section class="sec" id="estructura">
+  <header><h2>Estructura cristalina</h2><p>La concentración de electrones de valencia (VEC) ayuda a anticipar la fase: FCC a partir de 8 y BCC por debajo de 6.87.</p></header>
+  <div class="grid">
+   <article class="glass card c7"><h3>Fases según el VEC</h3><p class="sub">Registros por intervalo de VEC, coloreados por estructura.</p>
+    <div class="plot"><canvas id="ch-vec"></canvas></div></article>
+   <article class="glass card c5"><h3>Estructuras en el filtro</h3><p class="sub">Participación de cada familia.</p>
+    <div class="plot"><canvas id="ch-fam"></canvas></div></article>
+   <article class="glass card c12"><h3>YS mediano por estructura</h3><p class="sub">Tensión y compresión por separado. Las barras vacías indican que no hay datos.</p>
+    <div class="plot short"><canvas id="ch-famys"></canvas></div></article>
+  </div>
+ </section>
+
+ <section class="sec" id="proceso">
+  <header><h2>Proceso y temperatura</h2><p>El procesamiento cambia la microestructura; la temperatura de ensayo revela hasta dónde se conserva la resistencia.</p></header>
+  <div class="grid">
+   <article class="glass card c5"><h3>YS mediano por proceso</h3><p class="sub">Colada, colada con recocido, deformado y polvos.</p>
+    <div class="plot"><canvas id="ch-ruta"></canvas></div></article>
+   <article class="glass card c7"><h3>Resistencia contra temperatura</h3><p class="sub">YS de cada registro según la temperatura de ensayo. Esta gráfica ignora el filtro de temperatura y respeta los demás.</p>
+    <div class="legend" id="lg2"></div><div class="plot"><canvas id="ch-temp"></canvas><div class="empty" id="e-temp">Sin datos con estos filtros.</div></div></article>
+  </div>
+ </section>
+
+ <section class="sec" id="tabla">
+  <header><h2>Registros</h2><p>Ordena con las columnas y abre una aleación para ver su composición y su artículo de origen.</p></header>
+  <div class="glass card"><div class="twrap"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+   <button class="more" id="more">Mostrar más</button></div>
+ </section>
+
+ <footer class="glass">
+  <b>Sobre los datos.</b> Fuente: Borg et al. (2020), <i>Scientific Data</i> 7, 430. Dataset 3 del curso de Ingeniería de Materiales, ya depurado: 1,527 registros de 672 fórmulas.
+  <ul>
+   <li>Una aleación puede tener varios registros: distinto proceso, temperatura o ensayo.</li>
+   <li>Muchos registros no tienen todos los datos: el YS existe en 70 %, la elongación en 41 % y el tamaño de grano en 16 %.</li>
+   <li>Los valores de «mayor que» y «menor que» se muestran como el número reportado.</li>
+   <li>La densidad es la calculada con la regla de mezclas, no la medida.</li>
+  </ul>
+ </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"><div class="glass" id="dbody"></div></aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="datos.js"></script>
+<script>
+/* ---------- datos ---------- */
+const K={f:0,fam:1,fas:2,ruta:3,sint:4,ens:5,T:6,ys:7,uts:8,el:9,hv:10,gr:11,rho:12,vec:13,doi:14,E:15,com:16,comp:17};
+const R=window.HEA;
+const FAM=[['FCC','#4fc3f7'],['BCC/B2','#ff6b1a'],['FCC + BCC','#ff4d8d'],['BCC + IM','#ffa23a'],['FCC + IM','#a78bfa'],['Otras','#5eead4'],['Sin dato','#6f6f7e']];
+const FC=Object.fromEntries(FAM);
+const RUTAS=['Colada','Colada + recocido','Deformado','Polvos'];
+const ENS=['Tensión','Compresión'];
+const med=a=>{a=a.filter(v=>v!=null).sort((x,y)=>x-y);if(!a.length)return null;const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2};
+const fmt=(v,d=0)=>v==null?'—':Number(v).toLocaleString('es-MX',{maximumFractionDigits:d,minimumFractionDigits:d});
+const elCount={};R.forEach(r=>r[K.comp].forEach(c=>{const e=c.split(' ')[0];elCount[e]=(elCount[e]||0)+1}));
+const ELS=Object.entries(elCount).sort((a,b)=>b[1]-a[1]).slice(0,16).map(x=>x[0]);
+
+/* ---------- estado ---------- */
+const S={fam:new Set(),ens:new Set(),ruta:new Set(),el:new Set(),amb:true,tmax:1600,q:'',sort:'ys',asc:false,show:40};
+function resetState(){S.fam.clear();S.ens.clear();S.ruta.clear();S.el.clear();S.amb=true;S.tmax=1600;S.q='';S.show=40}
+function pass(r,noT){
+  if(S.fam.size&&!S.fam.has(r[K.fam]))return false;
+  if(S.ens.size&&!S.ens.has(r[K.ens]))return false;
+  if(S.ruta.size&&!S.ruta.has(r[K.ruta]))return false;
+  if(!noT){ if(S.amb){ if(r[K.T]==null||Math.abs(r[K.T]-25)>5) return false } else if(r[K.T]!=null&&r[K.T]>S.tmax) return false; }
+  if(S.q&&!r[K.f].toLowerCase().includes(S.q))return false;
+  if(S.el.size){const have=new Set(r[K.comp].map(c=>c.split(' ')[0]));for(const e of S.el)if(!have.has(e))return false}
+  return true;
+}
+
+/* ---------- controles ---------- */
+function chips(id,items,set,color){
+  const box=document.getElementById(id);box.innerHTML='';
+  items.forEach(it=>{const name=Array.isArray(it)?it[0]:it;const b=document.createElement('div');b.className='chip';b.tabIndex=0;b.setAttribute('role','switch');
+   b.innerHTML=(color?`<span class="sw" style="background:${FC[name]}"></span>`:'')+name;
+   const t=()=>{set.has(name)?set.delete(name):set.add(name);S.show=40;update()};
+   b.onclick=t;b.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();t()}};b.dataset.k=name;box.appendChild(b)});
+}
+function syncChips(){
+  for(const [id,set] of [['f-fam',S.fam],['f-ens',S.ens],['f-ruta',S.ruta],['f-el',S.el]])
+    document.querySelectorAll('#'+id+' .chip').forEach(c=>{const on=set.has(c.dataset.k);c.classList.toggle('on',on);c.setAttribute('aria-checked',on)});
+  const a=document.getElementById('f-amb');a.classList.toggle('on',S.amb);a.setAttribute('aria-checked',S.amb);
+  const tm=document.getElementById('f-tmax');tm.disabled=S.amb;tm.style.opacity=S.amb?.35:1;
+  document.getElementById('f-tl').textContent=S.amb?'25 °C':'hasta '+S.tmax+' °C';
+}
+chips('f-fam',FAM.slice(0,6),S.fam,true);chips('f-ens',ENS,S.ens);chips('f-ruta',RUTAS,S.ruta);chips('f-el',ELS,S.el);
+const amb=document.getElementById('f-amb');
+amb.onclick=()=>{S.amb=!S.amb;update()};amb.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();S.amb=!S.amb;update()}};
+document.getElementById('f-tmax').oninput=e=>{S.tmax=+e.target.value;update()};
+document.getElementById('f-q').oninput=e=>{S.q=e.target.value.trim().toLowerCase();S.show=40;update()};
+document.getElementById('reset').onclick=()=>{resetState();document.getElementById('f-q').value='';document.getElementById('f-tmax').value=1600;update()};
+
+/* ---------- gráficas ---------- */
+Chart.defaults.color='#b4b4c2';Chart.defaults.font.family="'Inter',system-ui,sans-serif";Chart.defaults.font.size=12;
+Chart.defaults.animation=false;Chart.defaults.maintainAspectRatio=false;Chart.defaults.responsive=true;
+Chart.defaults.plugins.legend.display=false;
+Object.assign(Chart.defaults.plugins.tooltip,{backgroundColor:'rgba(16,16,24,.92)',borderColor:'rgba(255,255,255,.2)',borderWidth:1,padding:10,titleColor:'#fff',bodyColor:'#d6d6e0',cornerRadius:12});
+const GRID='rgba(255,255,255,.07)';
+const ax=(title,extra={})=>Object.assign({title:{display:true,text:title,color:'#9a9aa8'},grid:{color:GRID},border:{color:'rgba(255,255,255,.18)'},ticks:{maxTicksLimit:7}},extra);
+
+const charts={};
+function scatter(id,xt,yt,opts={}){
+  charts[id]=new Chart(document.getElementById(id),{type:'scatter',data:{datasets:[]},options:{
+   scales:{x:ax(xt,opts.x||{}),y:ax(yt,opts.y||{})},
+   plugins:{tooltip:{callbacks:{title:i=>i[0].raw.f,label:c=>{const p=c.raw;return [p.fam+' · '+(p.ens||'ensayo s/d')+(p.T!=null?' · '+p.T+' °C':''),opts.tip(p)]}}}},
+   elements:{point:{radius:3.6,hoverRadius:6}},onClick:(e,els,ch)=>{if(els.length){openRow(ch.data.datasets[els[0].datasetIndex].data[els[0].index].row)}}}});
+}
+function ptsByFam(rows,xi,yi,tf){
+  const by={};rows.forEach(r=>{const x=tf?tf.x(r):r[xi],y=r[yi];if(x==null||y==null||!isFinite(x))return;
+    (by[r[K.fam]]=by[r[K.fam]]||[]).push({x,y,f:r[K.f],fam:r[K.fam],ens:r[K.ens],T:r[K.T],row:r,ys:r[K.ys],el:r[K.el],rho:r[K.rho],hv:r[K.hv],gr:r[K.gr]})});
+  return FAM.filter(f=>by[f[0]]).map(([n,c])=>({label:n,data:by[n],backgroundColor:c+'bb',borderColor:c,borderWidth:1,
+    pointStyle:ctx=>ctx.raw&&ctx.raw.ens==='Compresión'?'triangle':'circle',pointRadius:ctx=>ctx.raw&&ctx.raw.ens==='Compresión'?4.4:3.6}));
+}
+scatter('ch-ysel','Elongación (%)','YS (MPa)',{tip:p=>`YS ${fmt(p.ys)} MPa · elongación ${fmt(p.el,1)} %`});
+scatter('ch-rho','Densidad (g/cm³)','YS (MPa)',{tip:p=>`YS ${fmt(p.ys)} MPa · ρ ${fmt(p.rho,2)} g/cm³`});
+scatter('ch-hv','YS (MPa)','Dureza (HV)',{tip:p=>`HV ${fmt(p.hv)} · YS ${fmt(p.ys)} MPa`});
+scatter('ch-hp','d^−½ (µm^−½)','YS (MPa)',{tip:p=>`d ${fmt(p.gr,1)} µm · YS ${fmt(p.ys)} MPa`});
+scatter('ch-temp','Temperatura de ensayo (°C)','YS (MPa)',{tip:p=>`YS ${fmt(p.ys)} MPa a ${p.T} °C`});
+
+charts['ch-hist']=new Chart(document.getElementById('ch-hist'),{type:'bar',data:{labels:[],datasets:[]},options:{scales:{x:ax('YS (MPa)',{grid:{display:false}}),y:ax('Registros')},
+  plugins:{tooltip:{callbacks:{title:i=>i[0].label+' MPa'}}}}});
+const vecLine={id:'vecLine',afterDatasetsDraw(ch){
+  if(ch.canvas.id!=='ch-vec')return;const {ctx,chartArea:a,scales:{x}}=ch;ctx.save();ctx.setLineDash([5,4]);ctx.lineWidth=1.4;ctx.font='11px Inter';
+  [[6.87,'BCC < 6.87','#ff6b1a'],[8,'FCC ≥ 8','#4fc3f7']].forEach(([v,t,c])=>{const k=(v-2)/0.5-0.5;const px=x.getPixelForValue(k);
+   ctx.strokeStyle=c;ctx.beginPath();ctx.moveTo(px,a.top);ctx.lineTo(px,a.bottom);ctx.stroke();ctx.fillStyle=c;ctx.textAlign=v<7?'right':'left';ctx.fillText(t,px+(v<7?-6:6),a.top+12)});
+  ctx.restore()}};
+charts['ch-vec']=new Chart(document.getElementById('ch-vec'),{type:'bar',plugins:[vecLine],data:{labels:[],datasets:[]},options:{
+  scales:{x:ax('VEC (e⁻/átomo)',{stacked:true,grid:{display:false}}),y:ax('Registros',{stacked:true})},
+  plugins:{legend:{display:true,labels:{usePointStyle:true,boxWidth:8,color:'#b4b4c2'}},tooltip:{mode:'index',intersect:false}}}});
+charts['ch-fam']=new Chart(document.getElementById('ch-fam'),{type:'doughnut',data:{labels:[],datasets:[{data:[],backgroundColor:[],borderColor:'rgba(8,8,11,.9)',borderWidth:3,hoverOffset:8}]},options:{
+  cutout:'62%',plugins:{legend:{display:true,position:'bottom',labels:{usePointStyle:true,boxWidth:8,color:'#b4b4c2',padding:12}}}}});
+charts['ch-famys']=new Chart(document.getElementById('ch-famys'),{type:'bar',data:{labels:[],datasets:[]},options:{
+  scales:{x:ax('Estructura',{grid:{display:false}}),y:ax('YS mediano (MPa)')},plugins:{legend:{display:true,labels:{usePointStyle:true,boxWidth:8,color:'#b4b4c2'}},
+  tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.raw)} MPa (${c.dataset.n[c.dataIndex]} registros)`}}}}});
+charts['ch-ruta']=new Chart(document.getElementById('ch-ruta'),{type:'bar',data:{labels:[],datasets:[]},options:{indexAxis:'y',
+  scales:{x:ax('YS mediano (MPa)'),y:ax('',{grid:{display:false}})},plugins:{legend:{display:true,labels:{usePointStyle:true,boxWidth:8,color:'#b4b4c2'}},
+  tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.raw)} MPa (${c.dataset.n[c.dataIndex]} registros)`}}}}});
+
+/* ---------- actualización ---------- */
+const $=id=>document.getElementById(id);
+function setEmpty(id,show){const e=$(id);if(e)e.style.display=show?'grid':'none'}
+function legendHTML(sets){return sets.map(s=>`<span><i style="background:${s.borderColor}"></i>${s.label} <small>(${s.data.length})</small></span>`).join('')+'<span>● tensión &nbsp;▲ compresión</span>'}
+function update(){
+  syncChips();
+  const rows=R.filter(r=>pass(r));
+  $('f-n').textContent=fmt(rows.length);
+  const uniq=new Set(rows.map(r=>r[K.f])).size;
+  const kp=[
+   [fmt(rows.length),'registros',`de ${fmt(R.length)} en total`],
+   [fmt(uniq),'composiciones distintas',''],
+   [fmt(med(rows.map(r=>r[K.ys]))),'YS mediano (MPa)',`${fmt(rows.filter(r=>r[K.ys]!=null).length)} con dato`],
+   [fmt(med(rows.map(r=>r[K.el])),1),'Elongación mediana (%)',`${fmt(rows.filter(r=>r[K.el]!=null).length)} con dato`],
+   [fmt(med(rows.map(r=>r[K.hv]))),'Dureza mediana (HV)',`${fmt(rows.filter(r=>r[K.hv]!=null).length)} con dato`],
+   [fmt(med(rows.map(r=>r[K.rho])),2),'Densidad mediana (g/cm³)','calculada']];
+  $('kpis').innerHTML=kp.map(k=>`<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span><small>${k[2]}&nbsp;</small></div>`).join('');
+
+  // dispersión YS-elongación
+  let ds=ptsByFam(rows,K.el,K.ys);setData('ch-ysel',ds);$('lg1').innerHTML=legendHTML(ds);setEmpty('e-ysel',!ds.length);
+  const sel=ds.flatMap(d=>d.data);const good=sel.filter(p=>p.ys>=1000&&p.el>=20).length;
+  $('n-ysel').innerHTML=sel.length?`<b>${good}</b> de ${sel.length} registros combinan YS ≥ 1000 MPa con elongación ≥ 20 %.`:'';
+  ds=ptsByFam(rows,K.rho,K.ys);setData('ch-rho',ds);setEmpty('e-rho',!ds.length);
+  const sp=ds.flatMap(d=>d.data).map(p=>({p,v:p.ys/p.rho})).sort((a,b)=>b.v-a.v)[0];
+  $('n-rho').innerHTML=sp?`Mayor YS/ρ: <b>${sp.p.f}</b> con ${fmt(sp.v)} MPa·cm³/g.`:'';
+  ds=ptsByFam(rows,K.ys,K.hv);setData('ch-hv',ds);setEmpty('e-hv',!ds.length);
+  ds=ptsByFam(rows.filter(r=>r[K.gr]>0),null,K.ys,{x:r=>1/Math.sqrt(r[K.gr])});
+  const hp=ds.flatMap(d=>d.data);
+  if(hp.length>=3){const n=hp.length,sx=hp.reduce((a,p)=>a+p.x,0),sy=hp.reduce((a,p)=>a+p.y,0),sxx=hp.reduce((a,p)=>a+p.x*p.x,0),sxy=hp.reduce((a,p)=>a+p.x*p.y,0),syy=hp.reduce((a,p)=>a+p.y*p.y,0);
+    const k=(n*sxy-sx*sy)/(n*sxx-sx*sx),s0=(sy-k*sx)/n,r2=Math.pow((n*sxy-sx*sy),2)/((n*sxx-sx*sx)*(n*syy-sy*sy));
+    const xs=hp.map(p=>p.x),x0=Math.min(...xs),x1=Math.max(...xs);
+    ds.push({label:'Ajuste',type:'line',data:[{x:x0,y:s0+k*x0},{x:x1,y:s0+k*x1}],borderColor:'#fff',borderDash:[6,4],borderWidth:2,pointRadius:0,fill:false});
+    $('n-hp').innerHTML=`Ajuste lineal (n = ${n}): σ₀ = <b>${fmt(s0)}</b> MPa, k = <b>${fmt(k)}</b> MPa·µm<sup>½</sup>, R² = ${fmt(r2,2)}.`;
+  } else $('n-hp').textContent='';
+  setData('ch-hp',ds);setEmpty('e-hp',!hp.length);
+
+  // histograma YS
+  const ysv=rows.map(r=>r[K.ys]).filter(v=>v!=null);const bins=Array.from({length:17},(_,i)=>i*200);
+  charts['ch-hist'].data.labels=bins.map((b,i)=>i===16?'3200+':`${b}–${b+200}`);
+  charts['ch-hist'].data.datasets=[{data:bins.map((b,i)=>ysv.filter(v=>i===16?v>=3200:v>=b&&v<b+200).length),backgroundColor:'rgba(255,107,26,.75)',borderColor:'#ffa23a',borderWidth:1,borderRadius:5}];
+  charts['ch-hist'].options.scales.x.ticks={maxRotation:60,autoSkip:true,maxTicksLimit:9};charts['ch-hist'].update();
+
+  // VEC apilado
+  const vb=Array.from({length:16},(_,i)=>2+i*.5);
+  charts['ch-vec'].data.labels=vb.map(v=>v.toFixed(1));
+  charts['ch-vec'].data.datasets=FAM.map(([n,c])=>({label:n,backgroundColor:c+'cc',borderColor:c,borderWidth:0,data:vb.map(b=>rows.filter(r=>r[K.fam]===n&&r[K.vec]>=b&&r[K.vec]<b+.5).length)})).filter(d=>d.data.some(v=>v));
+  charts['ch-vec'].update();
+  // dona
+  const cnt=FAM.map(([n])=>[n,rows.filter(r=>r[K.fam]===n).length]).filter(x=>x[1]);
+  const dn=charts['ch-fam'];dn.data.labels=cnt.map(x=>x[0]);dn.data.datasets[0].data=cnt.map(x=>x[1]);dn.data.datasets[0].backgroundColor=cnt.map(x=>FC[x[0]]);dn.update();
+  // YS por familia y ensayo
+  const fams=FAM.slice(0,6).map(f=>f[0]).filter(f=>rows.some(r=>r[K.fam]===f));
+  charts['ch-famys'].data.labels=fams;
+  charts['ch-famys'].data.datasets=[['Tensión','#ff6b1a'],['Compresión','#4fc3f7']].map(([e,c])=>{const sub=fams.map(f=>rows.filter(r=>r[K.fam]===f&&r[K.ens]===e&&r[K.ys]!=null));
+   return {label:e,backgroundColor:c+'cc',borderColor:c,borderWidth:1,borderRadius:6,data:sub.map(s=>med(s.map(r=>r[K.ys]))),n:sub.map(s=>s.length)}});
+  charts['ch-famys'].update();
+  // por proceso
+  const rts=RUTAS.filter(t=>rows.some(r=>r[K.ruta]===t));
+  charts['ch-ruta'].data.labels=rts;
+  charts['ch-ruta'].data.datasets=[['Tensión','#ff6b1a'],['Compresión','#4fc3f7']].map(([e,c])=>{const sub=rts.map(t=>rows.filter(r=>r[K.ruta]===t&&r[K.ens]===e&&r[K.ys]!=null));
+   return {label:e,backgroundColor:c+'cc',borderColor:c,borderWidth:1,borderRadius:6,data:sub.map(s=>med(s.map(r=>r[K.ys]))),n:sub.map(s=>s.length)}});
+  charts['ch-ruta'].update();
+  // temperatura
+  ds=ptsByFam(R.filter(r=>pass(r,true)),K.T,K.ys);setData('ch-temp',ds);$('lg2').innerHTML=legendHTML(ds);setEmpty('e-temp',!ds.length);
+  const tv=ds.flatMap(d=>d.data).map(p=>p.T);
+  charts['ch-temp'].options.scales.x.min=tv.length?Math.min(...tv)-20:undefined;
+  tables(rows);
+}
+function setData(id,ds){charts[id].data.datasets=ds;charts[id].update()}
+
+/* ---------- tabla ---------- */
+const COLS=[['f','Fórmula','f'],['fam','Estructura'],['ruta','Proceso'],['ens','Ensayo'],['T','T (°C)','n'],['ys','YS (MPa)','n'],['uts','UTS (MPa)','n'],['el','Elong. (%)','n'],['hv','HV','n'],['rho','ρ (g/cm³)','n']];
+$('th').innerHTML='<tr>'+COLS.map(c=>`<th tabindex="0" data-k="${c[0]}" class="${c[2]==='n'?'n':''}">${c[1]}</th>`).join('')+'</tr>';
+document.querySelectorAll('#th th').forEach(th=>{const go=()=>{const k=th.dataset.k;if(S.sort===k)S.asc=!S.asc;else{S.sort=k;S.asc=(k==='f'||k==='fam'||k==='ruta'||k==='ens')}update()};th.onclick=go;th.onkeydown=e=>{if(e.key==='Enter')go()}});
+let curRows=[];
+function tables(rows){
+  const k=K[S.sort],dir=S.asc?1:-1;
+  curRows=rows.slice().sort((a,b)=>{const x=a[k],y=b[k];if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;return (x>y?1:x<y?-1:0)*dir});
+  document.querySelectorAll('#th th').forEach(t=>{t.classList.toggle('s',t.dataset.k===S.sort);t.classList.toggle('asc',t.dataset.k===S.sort&&S.asc)});
+  const vis=curRows.slice(0,S.show);
+  $('tb').innerHTML=vis.map((r,i)=>`<tr tabindex="0" data-i="${i}"><td class="f">${r[K.f]}</td><td><span class="tag" style="border-color:${FC[r[K.fam]]}88;color:${FC[r[K.fam]]}">${r[K.fam]}</span></td><td>${r[K.ruta]||'—'}</td><td>${r[K.ens]||'—'}</td><td class="n">${fmt(r[K.T])}</td><td class="n">${fmt(r[K.ys])}</td><td class="n">${fmt(r[K.uts])}</td><td class="n">${fmt(r[K.el],1)}</td><td class="n">${fmt(r[K.hv])}</td><td class="n">${fmt(r[K.rho],2)}</td></tr>`).join('');
+  $('tb').querySelectorAll('tr').forEach(tr=>{const o=()=>openRow(vis[+tr.dataset.i]);tr.onclick=o;tr.onkeydown=e=>{if(e.key==='Enter')o()}});
+  $('more').style.display=curRows.length>S.show?'block':'none';$('more').textContent=`Mostrar más (${fmt(curRows.length-S.show)} restantes)`;
+}
+$('more').onclick=()=>{S.show+=60;tables(R.filter(r=>pass(r)))};
+
+/* ---------- detalle ---------- */
+const ELC=['#ff6b1a','#4fc3f7','#ff4d8d','#ffa23a','#a78bfa','#5eead4','#f4f4f8','#f9d56e','#8bd17c','#c4c4d0','#ff9ec4','#7aa7ff'];
+function openRow(r){
+  const comp=r[K.comp].map(c=>{const [e,v]=c.split(' ');return [e,+v]}).sort((a,b)=>b[1]-a[1]);
+  const bar=comp.map(([e,v],i)=>`<i style="width:${v}%;background:${ELC[i%ELC.length]}" title="${e} ${v} %">${v>=7?e:''}</i>`).join('');
+  const item=(l,v,u='')=>`<div><b>${v==null?'—':v}${v!=null?u:''}</b><span>${l}</span></div>`;
+  $('dbody').innerHTML=`<div class="dh"><div><span class="tag" style="border-color:${FC[r[K.fam]]}88;color:${FC[r[K.fam]]}">${r[K.fam]}</span><h2 style="margin-top:10px">${r[K.f]}</h2>
+   <p class="mini">${r[K.fas]||'fases sin dato'} · ${r[K.ruta]||'proceso s/d'}${r[K.sint]?' ('+r[K.sint]+')':''}</p></div><button class="x" id="dx" aria-label="Cerrar">✕</button></div>
+   <div class="kv">${item('YS (MPa)',fmt(r[K.ys]))}${item('UTS (MPa)',fmt(r[K.uts]))}${item('Elongación',fmt(r[K.el],1),' %')}${item('Dureza HV',fmt(r[K.hv]))}${item('Tamaño de grano',fmt(r[K.gr],1),' µm')}${item('Densidad calc.',fmt(r[K.rho],2),' g/cm³')}${item('VEC',fmt(r[K.vec],2))}${item('Temperatura',fmt(r[K.T]),' °C')}</div>
+   <h3>Composición (% atómico)</h3><div class="bar">${bar}</div>
+   <p class="mini">${comp.map(([e,v])=>e+' '+v).join(' · ')}</p>
+   <p class="mini">Ensayo: ${r[K.ens]||'sin dato'}${r[K.E]!=null?' · E medido '+fmt(r[K.E])+' GPa':''}</p>
+   ${r[K.com]?`<p class="mini">Nota del dato: ${r[K.com]}</p>`:''}
+   <p class="mini">Artículo: <a href="https://doi.org/${encodeURI(r[K.doi])}" target="_blank" rel="noopener">doi.org/${r[K.doi]}</a></p>`;
+  $('drawer').classList.add('open');$('drawer').setAttribute('aria-hidden','false');$('scrim').classList.add('on');
+  $('dx').onclick=closeD;$('dx').focus();
+}
+function closeD(){$('drawer').classList.remove('open');$('drawer').setAttribute('aria-hidden','true');$('scrim').classList.remove('on')}
+$('scrim').onclick=closeD;addEventListener('keydown',e=>{if(e.key==='Escape')closeD()});
+
+/* ---------- brillo que sigue al cursor y navegación activa ---------- */
+document.addEventListener('pointermove',e=>{const g=e.target.closest&&e.target.closest('.glass');if(!g)return;const b=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-b.left)+'px');g.style.setProperty('--my',(e.clientY-b.top)+'px')});
+const links=[...document.querySelectorAll('.nav a')];
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id))}})},{rootMargin:'-30% 0px -60% 0px'});
+['resumen','propiedades','estructura','proceso','tabla'].forEach(id=>io.observe($(id)));
+
+update();
+</script>
+</body>
+</html>
